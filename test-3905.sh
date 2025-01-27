@@ -9,7 +9,7 @@ set -e
 
 SITE_DIR='/tmp'
 DIR_TEMPLATE="${SITE_DIR}/mkdocs_*"
-
+LOG_FILE="./test-3905.log"
 
 function CLEAR_MKDOCS {
 
@@ -23,6 +23,15 @@ function CLEAR_MKDOCS {
 
         rm -rf "$mkdocs_dir"
     done
+
+    # Remove any Mkdocs instance
+    pid="$(ss -ltp | grep mkdocs | grep -oE 'pid=[0-9]*' | grep -oE '[0-9]*')"
+
+    if [ -z "$pid" ]; then
+        return 0
+    fi
+
+    kill -s SIGKILL "$pid"
 
 }
 
@@ -57,7 +66,7 @@ function TEST_AND_CHECK {
 
         CLEAR_MKDOCS
 
-        mkdocs "$COMMAND" --quiet &
+        mkdocs "$COMMAND" 2>> "$LOG_FILE" >> "$LOG_FILE" &
         mkdocs_pid="$!"
         sleep 1s
 
@@ -69,6 +78,7 @@ function TEST_AND_CHECK {
             setterm --default
 
             printf "[FATAL] Should exists a '%s' directory. The behavior failed.\n" "$DIR_TEMPLATE"
+            exit 1
 
         fi
 
@@ -94,9 +104,16 @@ function TEST_AND_CHECK {
 
 {
 
-    if ! CLEAR_MKDOCS ; then
-        printf "[FATAL] Unable to prepare test\n"
+    if ! (
+        CLEAR_MKDOCS &&
+        touch "$LOG_FILE" &&
+        truncate --size 0 "$LOG_FILE"
+    ); then
+      printf "[FATAL] Unable to prepare test\n"
+      exit 1
     fi
+
+
 
     printf "[INFO] Testing\n"
 

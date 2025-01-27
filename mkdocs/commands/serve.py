@@ -4,8 +4,8 @@ import logging
 import shutil
 import sys
 import tempfile
-from signal import signal,SIGINT,SIGTERM
 from os.path import isdir, isfile, join
+from signal import SIGINT, SIGTERM, signal
 from typing import TYPE_CHECKING
 from urllib.parse import urlsplit
 
@@ -80,11 +80,16 @@ def serve(
                     return f.read()
         return None
 
-    def handle_signal(signum,frame) -> None:
+    def handle_signal(signum, frame) -> None:
+
+        from signal import strsignal
+
+        signal_name = strsignal(signum)
+        log.info(f"Received signal '{signal_name}'")
+
         shutdown()
 
     def shutdown() -> None:
-
         if not server.is_active:
             return
 
@@ -104,17 +109,18 @@ def serve(
     signal(SIGINT, handle_signal)
 
     if sys.platform == "linux":
-        from signal import SIGHUP,SIGUSR1,SIGUSR2,SIGQUIT
+        from signal import SIGHUP, SIGQUIT, SIGUSR1, SIGUSR2
+
         signal(SIGHUP, handle_signal)
         signal(SIGUSR1, handle_signal)
         signal(SIGUSR2, handle_signal)
         signal(SIGQUIT, handle_signal)
     elif sys.platform == "win32":
-        from signal import SIGBREAK,CTRL_C_EVENT,CTRL_BREAK_EVENT
+        from signal import CTRL_BREAK_EVENT, CTRL_C_EVENT, SIGBREAK
+
         signal(SIGBREAK, handle_signal)
         signal(CTRL_C_EVENT, handle_signal)
         signal(CTRL_BREAK_EVENT, handle_signal)
-
 
     try:
         # Perform the initial build
@@ -136,9 +142,7 @@ def serve(
             for item in config.watch:
                 server.watch(item)
 
-
         server.serve(open_in_browser=open_in_browser)
-
 
     finally:
         shutdown()
