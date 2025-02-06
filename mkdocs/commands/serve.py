@@ -109,12 +109,10 @@ def serve(
     signal(SIGINT, handle_signal)
 
     if sys.platform == "linux":
-        from signal import SIGHUP, SIGQUIT, SIGUSR1, SIGUSR2
+        from signal import SIGHUP
 
         signal(SIGHUP, handle_signal)
-        signal(SIGUSR1, handle_signal)
-        signal(SIGUSR2, handle_signal)
-        signal(SIGQUIT, handle_signal)
+
     elif sys.platform == "win32":
         from signal import CTRL_BREAK_EVENT, CTRL_C_EVENT, SIGBREAK
 
