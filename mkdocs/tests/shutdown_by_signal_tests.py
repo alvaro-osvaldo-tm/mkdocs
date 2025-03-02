@@ -40,7 +40,7 @@ class Shutdown_by_signal_tests(unittest.TestCase):
 
         configuration = {'site_name': 'Testing case', 'docs_dir': 'docs'}
 
-        docs_dir = f"{site_dir}/{configuration.get('docs_dir')}"
+        docs_dir = f"{site_dir}\\{configuration.get('docs_dir')}"
         mkdir(docs_dir)
 
         Path(site_dir, "mkdocs.yml").write_text(dump(configuration))
@@ -102,7 +102,7 @@ class Shutdown_by_signal_tests(unittest.TestCase):
             for found in mkdocs_temporary_path.glob('*'):
                 print(f" - found: {found}")
 
-            mkdocs_signature_path = Path(f"{mkdocs_temporary_path}\signature\index.html")
+            mkdocs_signature_path = Path(f"{mkdocs_temporary_path}\\signature\\index.html")
 
 
 
