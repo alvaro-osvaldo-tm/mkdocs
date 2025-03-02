@@ -119,6 +119,8 @@ def serve(
             signal(CTRL_BREAK_EVENT, handle_signal)
         except NameError:
             pass
+        except ValueError:
+            pass
 
     try:
         # Perform the initial build
