@@ -26,6 +26,7 @@ class Shutdown_by_signal_tests(unittest.TestCase):
     SLEEPING_TIME_WAITING_FOR_SHUTDOWN = 2
     SLEEPING_TIME_WAITING_FOR_PROCESS = 6
     TRIES_TO_CHECK_FOR_DIRECTORY_CLEANUP = 4
+    EXECUTE_MKDOCS_SILENTLY = False
 
     def _create_sample_repository(self) -> Sample_Repository:
         from os import mkdir
@@ -77,7 +78,14 @@ class Shutdown_by_signal_tests(unittest.TestCase):
 
             port_testing.close()
 
-        mkdocs = Popen('mkdocs serve'.split(' '), stdout=DEVNULL, stderr=DEVNULL, shell=False)
+
+        command = 'mkdocs serve'.split(' ')
+
+        if self.EXECUTE_MKDOCS_SILENTLY:
+            mkdocs = Popen(command, stdout=DEVNULL, stderr=DEVNULL, shell=False)
+        else:
+            mkdocs = Popen(command)
+
         sleep(self.SLEEPING_TIME_WAITING_FOR_START)
 
         chdir(current_working_dir)
@@ -117,7 +125,7 @@ class Shutdown_by_signal_tests(unittest.TestCase):
         return None
 
     def _is_active(self, mkdocs: Popen) -> bool:
-        from sys import platform
+
         from errno import ESRCH
         from os import kill
 
