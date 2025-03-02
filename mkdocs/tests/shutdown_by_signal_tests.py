@@ -98,7 +98,13 @@ class Shutdown_by_signal_tests(unittest.TestCase):
             print(f"Looking in: {mkdocs_temporary_directory}")
 
             mkdocs_temporary_path = Path(mkdocs_temporary_directory)
-            mkdocs_signature_path = Path(f"{mkdocs_temporary_path}/signature/index.html")
+
+            for found in mkdocs_temporary_path.glob('*'):
+                print(f" - found: {found}")
+
+            mkdocs_signature_path = Path(f"{mkdocs_temporary_path}\signature\index.html")
+
+
 
             if not mkdocs_temporary_path.exists():
                 continue
