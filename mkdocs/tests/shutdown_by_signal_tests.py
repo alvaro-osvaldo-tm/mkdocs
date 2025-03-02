@@ -117,11 +117,15 @@ class Shutdown_by_signal_tests(unittest.TestCase):
         return None
 
     def _is_active(self, mkdocs: Popen) -> bool:
+        from sys import platform
         from errno import ESRCH
         from os import kill
         from signal import SIG_BLOCK
 
         if mkdocs.returncode is not None:
+            return False
+
+        if platform == "win32":
             return False
 
         try:
