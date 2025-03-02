@@ -44,8 +44,11 @@ class Shutdown_by_signal_tests(unittest.TestCase):
         mkdir(docs_dir)
 
         Path(site_dir, "mkdocs.yml").write_text(dump(configuration))
-        file_index = Path(docs_dir, "index.md").write_text("# Index File")
-        file_signature = Path(docs_dir, "signature.md").write_text(f"# {signature} ")
+        file_index = Path(docs_dir, "index.md")
+        file_index.write_text("# Index File")
+
+        file_signature = Path(docs_dir, "signature.md")
+        file_signature.write_text(f"# {signature} ")
 
         print (f"Index file: {file_index}")
         print(f"Signature file: {file_signature }")

@@ -2,7 +2,6 @@ name: CI
 on:
   push:
     branches: [ 'proposals/3905-case-for-windows-only' ]
-    # Publish semver tags as releases.
     tags: [ '*.*.*' ]
 jobs:
   test:
