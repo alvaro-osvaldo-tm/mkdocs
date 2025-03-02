@@ -91,7 +91,12 @@ class Shutdown_by_signal_tests(unittest.TestCase):
         temporary_directory_probe = TemporaryDirectory()
         temporary_directory = Path(f"{temporary_directory_probe.name}").parent
 
+        print(f"Temporary Directory: {temporary_directory}")
+
         for mkdocs_temporary_directory in temporary_directory.glob('mkdocs_*'):
+
+            print(f"Looking in: {mkdocs_temporary_directory}")
+
             mkdocs_temporary_path = Path(mkdocs_temporary_directory)
             mkdocs_signature_path = Path(f"{mkdocs_temporary_path}/signature/index.html")
 
