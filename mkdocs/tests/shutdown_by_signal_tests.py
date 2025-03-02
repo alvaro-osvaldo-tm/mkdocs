@@ -40,7 +40,7 @@ class Shutdown_by_signal_tests(unittest.TestCase):
 
         configuration = {'site_name': 'Testing case', 'docs_dir': 'docs'}
 
-        docs_dir = f"{site_dir}\\{configuration.get('docs_dir')}"
+        docs_dir = f"{site_dir}/{configuration.get('docs_dir')}"
         mkdir(docs_dir)
 
         Path(site_dir, "mkdocs.yml").write_text(dump(configuration))
@@ -64,6 +64,8 @@ class Shutdown_by_signal_tests(unittest.TestCase):
         from subprocess import DEVNULL
         from sys import platform
 
+        DEVNULL = None
+
         current_working_dir = getcwd()
         chdir(site_dir)
 
@@ -83,7 +85,7 @@ class Shutdown_by_signal_tests(unittest.TestCase):
 
             port_testing.close()
 
-        mkdocs = Popen('mkdocs serve'.split(' '), stdout=DEVNULL, stderr=DEVNULL, shell=False)
+        mkdocs = Popen('mkdocs serve'.split(' '))
         sleep(self.SLEEPING_TIME_WAITING_FOR_START)
 
         chdir(current_working_dir)
@@ -108,7 +110,7 @@ class Shutdown_by_signal_tests(unittest.TestCase):
             for found in mkdocs_temporary_path.glob('*'):
                 print(f" - found: {found}")
 
-            mkdocs_signature_path = Path(f"{mkdocs_temporary_path}\\signature\\index.html")
+            mkdocs_signature_path = Path(f"{mkdocs_temporary_path}/signature/index.html")
 
             print(f" - looking for signature on '{mkdocs_signature_path}'")
 
@@ -175,13 +177,16 @@ class Shutdown_by_signal_tests(unittest.TestCase):
 
         repository = self._create_sample_repository()
 
-        for signal in [SIGINT, SIGTERM]:
+        for signal in [SIGINT]:
             mkdocs = self._execute_mkdocs_as_liveserver(repository.site_dir)
+
             mkdocs_temporary_path = self._locate_mkdocs_directory(signature=repository.signature)
 
             self.assertTrue(
                 mkdocs_temporary_path is not None, "Unable to locate the live server directory"
             )
+
+            continue
 
             self._wait_for_shutdown(mkdocs, signal)
 

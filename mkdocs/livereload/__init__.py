@@ -120,13 +120,10 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self.mount_path = _normalize_mount_path(mount_path)
 
 
-        print(f"root: f{self.root}")
+        print(f"root: {self.root}")
         for _ in Path(self.root).glob('*'):
             print (f" - {_}")
 
-        print(f"mount_path: f{self.mount_path}")
-        for _ in Path(self.mount_path).glob('*'):
-            print(f" - {_}")
 
         self.url = _serve_url(host, port, mount_path)
         self.build_delay = 0.1
