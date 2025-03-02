@@ -120,19 +120,18 @@ class Shutdown_by_signal_tests(unittest.TestCase):
         from sys import platform
         from errno import ESRCH
         from os import kill
-        from signal import SIG_BLOCK
 
         if mkdocs.returncode is not None:
             return False
 
-        if platform == "win32":
-            return False
-
         try:
+            from signal import SIG_BLOCK
             kill(mkdocs.pid, SIG_BLOCK)
         except OSError as exception:
             if exception.errno == ESRCH:
                 return True
+        except ImportError:
+            return False
 
         return False
 
