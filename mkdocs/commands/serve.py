@@ -116,6 +116,13 @@ def serve(
         signal(SIGBREAK, handle_signal)
 
         try:
+            signal(CTRL_C_EVENT, handle_signal)
+        except NameError:
+            pass
+        except ValueError:
+            pass
+
+        try:
             signal(CTRL_BREAK_EVENT, handle_signal)
         except NameError:
             pass
