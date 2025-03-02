@@ -111,14 +111,9 @@ def serve(
         signal(SIGHUP, handle_signal)
 
     elif sys.platform == "win32":
-        from signal import CTRL_BREAK_EVENT, CTRL_C_EVENT, SIGBREAK
+        from signal import SIGBREAK
 
         signal(SIGBREAK, handle_signal)
-
-        try:
-            signal(CTRL_C_EVENT, handle_signal)
-        except ValueError:
-            pass
 
         signal(CTRL_BREAK_EVENT, handle_signal)
 
