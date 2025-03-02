@@ -110,21 +110,25 @@ class Shutdown_by_signal_tests(unittest.TestCase):
 
             mkdocs_signature_path = Path(f"{mkdocs_temporary_path}\\signature\\index.html")
 
-
+            print(f" - looking for signature on '{mkdocs_signature_path}'")
 
             if not mkdocs_temporary_path.exists():
+                print(" · mkdocs_temporary_path not exists")
                 continue
 
             if not mkdocs_temporary_path.is_dir():
+                print(" · is not dir")
                 continue
 
             if not mkdocs_signature_path.exists():
+                print(" · mkdocs_signature_path not exists")
                 continue
 
             with mkdocs_signature_path.open('r') as fp:
                 signature_found = fp.read()
 
             if signature_found.find(signature) == -1:
+                print(" · signature not found")
                 continue
 
             temporary_directory_probe.cleanup()
