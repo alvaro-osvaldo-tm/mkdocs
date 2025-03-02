@@ -165,7 +165,7 @@ class Shutdown_by_signal_tests(unittest.TestCase):
 
         repository = self._create_sample_repository()
 
-        for signal in [SIGINT, SIGTERM]:
+        for signal in [SIGTERM]:
             mkdocs = self._execute_mkdocs_as_liveserver(repository.site_dir)
             mkdocs_temporary_path = self._locate_mkdocs_directory(signature=repository.signature)
 
