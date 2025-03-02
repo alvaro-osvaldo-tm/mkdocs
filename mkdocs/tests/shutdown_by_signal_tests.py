@@ -44,14 +44,8 @@ class Shutdown_by_signal_tests(unittest.TestCase):
         mkdir(docs_dir)
 
         Path(site_dir, "mkdocs.yml").write_text(dump(configuration))
-        file_index = Path(docs_dir, "index.md")
-        file_index.write_text("# Index File")
-
-        file_signature = Path(docs_dir, "signature.md")
-        file_signature.write_text(f"# {signature} ")
-
-        print (f"Index file: {file_index}")
-        print(f"Signature file: {file_signature }")
+        Path(docs_dir, "index.md").write_text("# Index File")
+        Path(docs_dir, "signature.md").write_text(f"# {signature} ")
 
         return Sample_Repository(
             handler=handler,
@@ -63,8 +57,6 @@ class Shutdown_by_signal_tests(unittest.TestCase):
         from os import chdir, getcwd
         from subprocess import DEVNULL
         from sys import platform
-
-        DEVNULL = None
 
         current_working_dir = getcwd()
         chdir(site_dir)
@@ -85,7 +77,7 @@ class Shutdown_by_signal_tests(unittest.TestCase):
 
             port_testing.close()
 
-        mkdocs = Popen('mkdocs serve'.split(' '))
+        mkdocs = Popen('mkdocs serve'.split(' '), stdout=DEVNULL, stderr=DEVNULL, shell=False)
         sleep(self.SLEEPING_TIME_WAITING_FOR_START)
 
         chdir(current_working_dir)
@@ -99,38 +91,23 @@ class Shutdown_by_signal_tests(unittest.TestCase):
         temporary_directory_probe = TemporaryDirectory()
         temporary_directory = Path(f"{temporary_directory_probe.name}").parent
 
-        print(f"Temporary Directory: {temporary_directory}")
-
         for mkdocs_temporary_directory in temporary_directory.glob('mkdocs_*'):
-
-            print(f"Looking in: {mkdocs_temporary_directory}")
-
             mkdocs_temporary_path = Path(mkdocs_temporary_directory)
-
-            for found in mkdocs_temporary_path.glob('*'):
-                print(f" - found: {found}")
-
             mkdocs_signature_path = Path(f"{mkdocs_temporary_path}/signature/index.html")
 
-            print(f" - looking for signature on '{mkdocs_signature_path}'")
-
             if not mkdocs_temporary_path.exists():
-                print(" · mkdocs_temporary_path not exists")
                 continue
 
             if not mkdocs_temporary_path.is_dir():
-                print(" · is not dir")
                 continue
 
             if not mkdocs_signature_path.exists():
-                print(" · mkdocs_signature_path not exists")
                 continue
 
             with mkdocs_signature_path.open('r') as fp:
                 signature_found = fp.read()
 
             if signature_found.find(signature) == -1:
-                print(" · signature not found")
                 continue
 
             temporary_directory_probe.cleanup()
@@ -177,16 +154,13 @@ class Shutdown_by_signal_tests(unittest.TestCase):
 
         repository = self._create_sample_repository()
 
-        for signal in [SIGINT]:
+        for signal in [SIGINT, SIGTERM]:
             mkdocs = self._execute_mkdocs_as_liveserver(repository.site_dir)
-
             mkdocs_temporary_path = self._locate_mkdocs_directory(signature=repository.signature)
 
             self.assertTrue(
                 mkdocs_temporary_path is not None, "Unable to locate the live server directory"
             )
-
-            continue
 
             self._wait_for_shutdown(mkdocs, signal)
 

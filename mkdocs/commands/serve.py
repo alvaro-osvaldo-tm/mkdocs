@@ -114,20 +114,8 @@ def serve(
         from signal import CTRL_BREAK_EVENT, CTRL_C_EVENT, SIGBREAK
 
         signal(SIGBREAK, handle_signal)
-
-        try:
-            signal(CTRL_C_EVENT, handle_signal)
-        except NameError:
-            pass
-        except ValueError:
-            pass
-
-        try:
-            signal(CTRL_BREAK_EVENT, handle_signal)
-        except NameError:
-            pass
-        except ValueError:
-            pass
+        signal(CTRL_C_EVENT, handle_signal)
+        signal(CTRL_BREAK_EVENT, handle_signal)
 
     try:
         # Perform the initial build

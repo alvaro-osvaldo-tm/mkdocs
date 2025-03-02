@@ -21,13 +21,10 @@ import urllib.parse
 import webbrowser
 import wsgiref.simple_server
 import wsgiref.util
-from pathlib import Path
 from typing import Any, BinaryIO, Callable, Iterable
 
 import watchdog.events
 import watchdog.observers.polling
-
-from mkdocs.config.config_options import PathSpec
 
 _SCRIPT_TEMPLATE_STR = """
 var livereload = function(epoch, requestId) {
@@ -118,13 +115,6 @@ class LiveReloadServer(socketserver.ThreadingMixIn, wsgiref.simple_server.WSGISe
         self._is_active = False
         self.root = os.path.abspath(root)
         self.mount_path = _normalize_mount_path(mount_path)
-
-
-        print(f"root: {self.root}")
-        for _ in Path(self.root).glob('*'):
-            print (f" - {_}")
-
-
         self.url = _serve_url(host, port, mount_path)
         self.build_delay = 0.1
         self.shutdown_delay = shutdown_delay
