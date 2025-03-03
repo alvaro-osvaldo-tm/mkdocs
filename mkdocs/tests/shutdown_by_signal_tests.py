@@ -170,10 +170,20 @@ class Shutdown_by_signal_tests(unittest.TestCase):
 
     def test_shutdown_with_signal(self):
         from signal import SIGINT, SIGTERM, strsignal
+        from sys import platform
 
         signals = [
             SIGINT,SIGTERM
         ]
+
+        if platform == 'win32':
+            from signal import SIGABRT, SIGFPE, SIGILL, SIGSEGV, SIGBREAK
+
+            signals.append(SIGABRT)
+            signals.append(SIGFPE)
+            signals.append(SIGILL)
+            signals.append(SIGSEGV)
+            signals.append(SIGBREAK)
 
         try:
             from signal import SIGBREAK

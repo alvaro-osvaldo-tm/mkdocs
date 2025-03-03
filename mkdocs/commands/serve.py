@@ -104,7 +104,23 @@ def serve(
 
     print(f"Platform: {sys.platform}")
 
+
+
     signals = {'SIGTERM': SIGTERM,'SIGINT' : SIGINT}
+
+    if sys.platform == 'win32':
+
+        from signal import SIGABRT, SIGFPE, SIGILL, SIGSEGV,  SIGBREAK
+
+        signals['SIGABRT'] = SIGABRT
+        signals['SIGFPE'] - SIGFPE
+        signals['SIGILL'] = SIGILL
+        signals['SIGSEGV'] = SIGSEGV
+        signals['SIGBREAK'] = SIGBREAK
+
+
+
+
 
     try:
         from signal import SIGHUP
