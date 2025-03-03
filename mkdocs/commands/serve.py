@@ -85,7 +85,7 @@ def serve(
     def handle_signal(signum, frame) -> None:
 
         log.info(f"Received signal ...")
-        print("Received signal")
+        print(f"Received signal code '{signum}'")
 
         signal_name = strsignal(signum)
         log.info(f"Received signal '{signal_name}'")
@@ -167,6 +167,7 @@ def serve(
     for signal_code in signal.Signals:
         try:
             configure_signal_handler(signal_code, handle_signal)
+            print(f"Configured for {strsignal(signal_code)}")
         except:
             pass
 
