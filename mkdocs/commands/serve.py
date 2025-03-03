@@ -41,13 +41,15 @@ def serve(
 
     def _ctrl_handler(sig):
         """Handle a sig event and return 0 to terminate the process"""
+        print(f"Received signal {sig}")
         if sig == signal.CTRL_C_EVENT:
-            pass
+            print(f"Received signal 'CTRL C'")
         elif sig == signal.CTRL_BREAK_EVENT:
-            pass
+            print(f"Received signal 'CTRL BREAK'")
         else:
             print("UNKNOWN EVENT")
-        return 0
+
+        exit(0)
 
     ctrl_handler = HandlerRoutine(_ctrl_handler)
 
