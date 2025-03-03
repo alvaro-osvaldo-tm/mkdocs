@@ -113,7 +113,7 @@ def serve(
         from signal import SIGABRT, SIGFPE, SIGILL, SIGSEGV,  SIGBREAK
 
         signals['SIGABRT'] = SIGABRT
-        signals['SIGFPE'] - SIGFPE
+        signals['SIGFPE'] = SIGFPE
         signals['SIGILL'] = SIGILL
         signals['SIGSEGV'] = SIGSEGV
         signals['SIGBREAK'] = SIGBREAK
