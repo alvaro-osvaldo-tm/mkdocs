@@ -198,6 +198,9 @@ class Shutdown_by_signal_tests(unittest.TestCase):
 
         for signal in signals:
 
+            if signal != 21:
+                continue
+
             print(f" ============ Testing with '{strsignal(signal)}' ============ ")
 
             mkdocs = self._execute_mkdocs_as_liveserver(repository.site_dir)

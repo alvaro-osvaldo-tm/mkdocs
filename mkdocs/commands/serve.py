@@ -90,7 +90,7 @@ def serve(
         signal_name = strsignal(signum)
         log.info(f"Received signal '{signal_name}'")
 
-        shutdown()
+        exit(0)
 
     def shutdown() -> None:
         if not server.is_active:
@@ -110,61 +110,12 @@ def serve(
 
     print(f"Platform: {sys.platform}")
 
-
-
-    signals = {'SIGTERM': SIGTERM,'SIGINT' : SIGINT}
-
-    if sys.platform == 'win32':
-
-        from signal import SIGABRT, SIGFPE, SIGILL, SIGSEGV,  SIGBREAK
-
-        signals['SIGABRT'] = SIGABRT
-        signals['SIGFPE'] = SIGFPE
-        signals['SIGILL'] = SIGILL
-        signals['SIGSEGV'] = SIGSEGV
-        signals['SIGBREAK'] = SIGBREAK
-
-
-
-
-
-    try:
-        from signal import SIGHUP
-        strsignal(SIGHUP)
-    except:
-        pass
-    else:
-        signals['SIGHUP'] = SIGHUP
-
-    try:
-        from signal import SIGQUIT
-        strsignal(SIGQUIT)
-    except:
-        pass
-    else:
-        signals['SIGQUIT'] = SIGQUIT
-
-
-
-
-    if sys.platform == "linux":
-        from signal import SIGHUP
-
-        signals['SIGHUP'] = SIGHUP
-
-    elif sys.platform == "win32":
-        from signal import CTRL_BREAK_EVENT, CTRL_C_EVENT, SIGBREAK
-
-        signals['SIGBREAK'] = SIGBREAK
-        signals['CTRL_C_EVENT'] = CTRL_C_EVENT
-        signals['CTRL_BREAK_EVENT'] = CTRL_BREAK_EVENT
-
-        # These events are not available in
-        # some cases as in github actions
-
-
     import signal
     for signal_code in signal.Signals:
+
+        if signal_code != 21:
+            continue
+
         try:
             configure_signal_handler(signal_code, handle_signal)
             print(f"Configured for {strsignal(signal_code)}")
