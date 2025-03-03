@@ -169,48 +169,13 @@ class Shutdown_by_signal_tests(unittest.TestCase):
         return False
 
     def test_shutdown_with_signal(self):
-        from signal import SIGINT, SIGTERM, strsignal
+
         from sys import platform
 
-        signals = [
-            SIGINT,SIGTERM
-        ]
-
-        if platform == 'win32':
-            from signal import SIGABRT, SIGFPE, SIGILL, SIGSEGV, SIGBREAK
-
-            signals.append(SIGABRT)
-            signals.append(SIGFPE)
-            signals.append(SIGILL)
-            signals.append(SIGSEGV)
-            signals.append(SIGBREAK)
-
-        try:
-            from signal import SIGBREAK
-            signals.append(SIGBREAK)
-        except ImportError:
-            pass
-
-        try:
-            strsignal(CTRL_C_EVENT)
-            signals.append(CTRL_C_EVENT)
-        except NameError:
-            pass
-        except ValueError:
-            pass
-        except ImportError:
-            pass
-
-        try:
-            strsignal(CTRL_BREAK_EVENT)
-            signals.append(CTRL_BREAK_EVENT)
-        except NameError:
-            pass
-        except ValueError:
-            pass
-        except ImportError:
-            pass
-
+        signals =[]
+        import signal
+        for signal_code in signal.Signals:
+            signals.append(signal_code)
 
         repository = self._create_sample_repository()
 

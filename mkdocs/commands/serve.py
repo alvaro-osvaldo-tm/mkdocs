@@ -5,7 +5,7 @@ import shutil
 import sys
 import tempfile
 from os.path import isdir, isfile, join
-from signal import SIGINT, SIGTERM, signal, strsignal
+from signal import SIGINT, SIGTERM, signal as configure_signal_handler , strsignal
 from time import sleep
 from typing import TYPE_CHECKING
 from urllib.parse import urlsplit
@@ -162,17 +162,14 @@ def serve(
         # some cases as in github actions
 
 
+    import signal
+    for signal_code in signal.Signals:
+        configure_signal_handler(signal_code, handle_signal)
 
-    for signal_name,signal_code in signals.items():
 
-        try:
-            signal(signal_code, handle_signal)
-        except NameError:
-            print(f"Failed with '{signal_name}'")
-        except ValueError:
-            print(f"Failed with '{signal_name}'")
-        else:
-            print(f"Configured signal '{signal_name}'")
+    exit(1)
+
+
 
     try:
       while True:
