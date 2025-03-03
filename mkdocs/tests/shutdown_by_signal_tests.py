@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import subprocess
 import unittest
 from dataclasses import dataclass
 from functools import singledispatchmethod
@@ -7,6 +8,8 @@ from pathlib import Path
 from subprocess import Popen
 from tempfile import TemporaryDirectory
 from time import sleep
+
+from packaging.tags import platform_tags
 
 
 @dataclass
@@ -62,6 +65,7 @@ class Shutdown_by_signal_tests(unittest.TestCase):
 
         current_working_dir = getcwd()
         chdir(site_dir)
+        creation_flags = 0
 
         if platform == "linux":
             from errno import EADDRINUSE
@@ -79,13 +83,16 @@ class Shutdown_by_signal_tests(unittest.TestCase):
 
             port_testing.close()
 
+        if platform  == "win32":
+            creation_flags = subprocess.CREATE_NEW_PROCESS_GROUP
+
 
         command = 'mkdocs serve'.split(' ')
 
         if self.EXECUTE_MKDOCS_SILENTLY:
-            mkdocs = Popen(command, stdout=DEVNULL, stderr=DEVNULL, shell=False)
+            mkdocs = Popen(command, stdout=DEVNULL, stderr=DEVNULL, shell=False,creationflags=creation_flags)
         else:
-            mkdocs = Popen(command)
+            mkdocs = Popen(command,creationflags=creation_flags)
 
         sleep(self.SLEEPING_TIME_WAITING_FOR_START)
 

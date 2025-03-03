@@ -106,6 +106,25 @@ def serve(
 
     signals = {'SIGTERM': SIGTERM,'SIGINT' : SIGINT}
 
+    try:
+        from signal import SIGHUP
+        strsignal(SIGHUP)
+    except:
+        pass
+    else:
+        signals['SIGHUP'] = SIGHUP
+
+    try:
+        from signal import SIGQUIT
+        strsignal(SIGQUIT)
+    except:
+        pass
+    else:
+        signals['SIGQUIT'] = SIGQUIT
+
+
+
+
     if sys.platform == "linux":
         from signal import SIGHUP
 
