@@ -87,6 +87,7 @@ def serve(
         log.info(f"Received signal ...")
         print(f"Received signal code '{signum}'")
 
+
         signal_name = strsignal(signum)
         log.info(f"Received signal '{signal_name}'")
 
@@ -113,8 +114,8 @@ def serve(
     import signal
     for signal_code in signal.Signals:
 
-        if signal_code != 21:
-            continue
+        #if signal_code != 21:
+            #continue
 
         try:
             configure_signal_handler(signal_code, handle_signal)

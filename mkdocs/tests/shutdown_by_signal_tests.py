@@ -198,8 +198,8 @@ class Shutdown_by_signal_tests(unittest.TestCase):
 
         for signal in signals:
 
-            if signal != 21:
-                continue
+            #if signal != 21:
+                #continue
 
             print(f" ============ Testing with '{strsignal(signal)}' ============ ")
 
