@@ -153,8 +153,12 @@ class Shutdown_by_signal_tests(unittest.TestCase):
 
     def _wait_for_shutdown(self, mkdocs: Popen, signal: int):
         from os import kill
+        from sys import platform
 
-        kill(mkdocs.pid, signal)
+        if platform == 'win32':
+            mkdocs.send_signal(signal)
+        else:
+            kill(mkdocs.pid, signal)
 
         while self._is_active(mkdocs):
             sleep(self.SLEEPING_TIME_WAITING_FOR_SHUTDOWN)
