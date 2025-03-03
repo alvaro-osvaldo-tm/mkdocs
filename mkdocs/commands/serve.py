@@ -102,35 +102,36 @@ def serve(
 
     server.error_handler = error_handler
 
-    signal(SIGTERM, handle_signal)
-    signal(SIGINT, handle_signal)
+    print(f"Platform: {sys.platform}")
+
+    signals = [SIGTERM,SIGINT]
 
     if sys.platform == "linux":
         from signal import SIGHUP
 
-        signal(SIGHUP, handle_signal)
+        signals.append(SIGHUP)
 
     elif sys.platform == "win32":
         from signal import CTRL_BREAK_EVENT, CTRL_C_EVENT, SIGBREAK
 
-        signal(SIGBREAK, handle_signal)
+        signals.append(SIGBREAK)
+        signals.append(CTRL_C_EVENT)
+        signals.append(CTRL_BREAK_EVENT)
 
         # These events are not available in
         # some cases as in github actions
 
-        try:
-            signal(CTRL_C_EVENT, handle_signal)
-        except NameError:
-            pass
-        except ValueError:
-            pass
+    for signal_code in signals:
 
         try:
-            signal(CTRL_BREAK_EVENT, handle_signal)
+
+            print(f"Configuring signal code '{signal_code}'")
+            print(f" - {signal(signal_code, handle_signal)}")
+
         except NameError:
-            pass
+            print(f" · Failed")
         except ValueError:
-            pass
+            print(f" · Failed")
 
     try:
         # Perform the initial build
