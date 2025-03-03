@@ -216,7 +216,7 @@ class Shutdown_by_signal_tests(unittest.TestCase):
 
         for signal in signals:
 
-            print(f"Testing {strsignal(signal)}")
+            print(f" ============ Testing with '{strsignal(signal)}' ============ ")
 
             mkdocs = self._execute_mkdocs_as_liveserver(repository.site_dir)
             mkdocs_temporary_path = self._locate_mkdocs_directory(signature=repository.signature)

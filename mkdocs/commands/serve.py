@@ -81,6 +81,10 @@ def serve(
         return None
 
     def handle_signal(signum, frame) -> None:
+
+        log.info(f"Received signal ...")
+        print("Received signal")
+
         signal_name = strsignal(signum)
         log.info(f"Received signal '{signal_name}'")
 
