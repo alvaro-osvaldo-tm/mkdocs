@@ -6,6 +6,7 @@ import sys
 import tempfile
 from os.path import isdir, isfile, join
 from signal import SIGINT, SIGTERM, signal, strsignal
+from time import sleep
 from typing import TYPE_CHECKING
 from urllib.parse import urlsplit
 
@@ -174,27 +175,8 @@ def serve(
             print(f"Configured signal '{signal_name}'")
 
     try:
-        # Perform the initial build
-        builder(config)
-
-        if livereload:
-            # Watch the documentation files, the config file and the theme files.
-            server.watch(config.docs_dir)
-            if config.config_file_path:
-                server.watch(config.config_file_path)
-
-            if watch_theme:
-                for d in config.theme.dirs:
-                    server.watch(d)
-
-            # Run `serve` plugin events.
-            server = config.plugins.on_serve(server, config=config, builder=builder)
-
-            for item in config.watch:
-                server.watch(item)
-
-
-            server.serve(open_in_browser=open_in_browser)
+      while True:
+          sleep(1)
     except KeyboardInterrupt:
         print(" ========= CAPTURED =========")
         shutdown()
