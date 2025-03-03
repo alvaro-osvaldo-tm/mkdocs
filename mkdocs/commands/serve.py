@@ -121,7 +121,9 @@ def serve(
         # These events are not available in
         # some cases as in github actions
 
-    for signal_name,signal_code in signals.values():
+
+
+    for signal_name,signal_code in signals.items():
 
         try:
             signal(signal_code, handle_signal)
