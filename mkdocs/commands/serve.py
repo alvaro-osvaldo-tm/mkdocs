@@ -193,7 +193,10 @@ def serve(
             for item in config.watch:
                 server.watch(item)
 
-        server.serve(open_in_browser=open_in_browser)
 
+            server.serve(open_in_browser=open_in_browser)
+    except KeyboardInterrupt:
+        print(" ========= CAPTURED =========")
+        shutdown()
     finally:
         shutdown()
