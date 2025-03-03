@@ -172,6 +172,8 @@ class Shutdown_by_signal_tests(unittest.TestCase):
 
         from sys import platform
 
+        from signal import  strsignal
+
         signals =[]
         import signal
         for signal_code in signal.Signals:
