@@ -130,7 +130,8 @@ def serve(
           print(f"[{getpid()}] waiting ")
           sleep(1)
     except KeyboardInterrupt:
-        print(" ========= CAPTURED =========")
-        shutdown()
-    finally:
-        shutdown()
+        print(" ********* CAPTURED Keyboards *********")
+    except Exception as e:
+        print(" ********* CAPTURED Keyboards *********")
+        print(e)
+
