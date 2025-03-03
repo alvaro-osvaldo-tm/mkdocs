@@ -20,8 +20,57 @@ if TYPE_CHECKING:
 
 log = logging.getLogger(__name__)
 
-
 def serve(
+    config_file: str | None = None,
+    livereload: bool = True,
+    build_type: str | None = None,
+    watch_theme: bool = False,
+    watch: list[str] = [],
+    *,
+    open_in_browser: bool = False,
+    **kwargs,
+) -> None:
+    from ctypes import wintypes, WINFUNCTYPE
+    import signal
+    import ctypes
+    import mmap
+    import sys
+
+    # Function prototype for the handler function. Returns BOOL, takes a DWORD.
+    HandlerRoutine = WINFUNCTYPE(wintypes.BOOL, wintypes.DWORD)
+
+    def _ctrl_handler(sig):
+        """Handle a sig event and return 0 to terminate the process"""
+        if sig == signal.CTRL_C_EVENT:
+            pass
+        elif sig == signal.CTRL_BREAK_EVENT:
+            pass
+        else:
+            print("UNKNOWN EVENT")
+        return 0
+
+    ctrl_handler = HandlerRoutine(_ctrl_handler)
+
+    SetConsoleCtrlHandler = ctypes.windll.kernel32.SetConsoleCtrlHandler
+    SetConsoleCtrlHandler.argtypes = (HandlerRoutine, wintypes.BOOL)
+    SetConsoleCtrlHandler.restype = wintypes.BOOL
+
+
+    # Add our console control handling function with value 1
+    if not SetConsoleCtrlHandler(ctrl_handler, 1):
+        print("Unable to add SetConsoleCtrlHandler")
+        exit(-1)
+
+    # Do nothing but wait for the signal
+    while True:
+        print(f"[{getpid()}] Waiting" )
+        sleep(1)
+
+        pass
+
+
+
+def serve2(
     config_file: str | None = None,
     livereload: bool = True,
     build_type: str | None = None,
