@@ -164,7 +164,10 @@ def serve(
 
     import signal
     for signal_code in signal.Signals:
-        configure_signal_handler(signal_code, handle_signal)
+        try:
+            configure_signal_handler(signal_code, handle_signal)
+        except:
+            pass
 
 
     exit(1)

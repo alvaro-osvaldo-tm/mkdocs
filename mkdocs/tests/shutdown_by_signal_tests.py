@@ -177,7 +177,12 @@ class Shutdown_by_signal_tests(unittest.TestCase):
         signals =[]
         import signal
         for signal_code in signal.Signals:
-            signals.append(signal_code)
+            try:
+                strsignal(signal_code)
+                signals.append(signal_code)
+            except:
+                pass
+
 
         repository = self._create_sample_repository()
 
