@@ -176,6 +176,7 @@ def serve(
 
     try:
       while True:
+          print(".")
           sleep(1)
     except KeyboardInterrupt:
         print(" ========= CAPTURED =========")
