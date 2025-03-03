@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import unittest
 from dataclasses import dataclass
+from functools import singledispatchmethod
 from pathlib import Path
 from subprocess import Popen
 from tempfile import TemporaryDirectory
@@ -161,24 +162,36 @@ class Shutdown_by_signal_tests(unittest.TestCase):
         return False
 
     def test_shutdown_with_signal(self):
-        from signal import SIGINT, SIGTERM,SIGBREAK,CTRL_C_EVENT,CTRL_BREAK_EVENT, strsignal
+        from signal import SIGINT, SIGTERM, strsignal
 
         signals = [
-            SIGINT,SIGTERM,SIGBREAK
+            SIGINT,SIGTERM
         ]
 
         try:
-            strsignal(CTRL_C_EVENT)
-        except NameError:
-            pass
-        except ValueError:
+            from signal import SIGBREAK
+            signals.append(SIGBREAK)
+        except ImportError:
             pass
 
         try:
             strsignal(CTRL_C_EVENT)
+            signals.append(CTRL_C_EVENT)
         except NameError:
             pass
         except ValueError:
+            pass
+        except ImportError:
+            pass
+
+        try:
+            strsignal(CTRL_BREAK_EVENT)
+            signals.append(CTRL_BREAK_EVENT)
+        except NameError:
+            pass
+        except ValueError:
+            pass
+        except ImportError:
             pass
 
 
