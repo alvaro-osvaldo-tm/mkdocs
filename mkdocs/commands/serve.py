@@ -4,6 +4,7 @@ import logging
 import shutil
 import sys
 import tempfile
+from os import getpid
 from os.path import isdir, isfile, join
 from signal import SIGINT, SIGTERM, signal as configure_signal_handler , strsignal
 from time import sleep
@@ -170,13 +171,10 @@ def serve(
             pass
 
 
-    exit(1)
-
-
-
     try:
       while True:
-          print(".")
+
+          print(f"[{getpid()}] waiting ")
           sleep(1)
     except KeyboardInterrupt:
         print(" ========= CAPTURED =========")
