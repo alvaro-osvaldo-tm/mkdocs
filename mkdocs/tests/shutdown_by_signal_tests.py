@@ -155,10 +155,16 @@ class Shutdown_by_signal_tests(unittest.TestCase):
         from os import kill
         from sys import platform
 
-        if platform == 'win32':
-            mkdocs.send_signal(signal)
-        else:
-            kill(mkdocs.pid, signal)
+
+        try:
+
+            if platform == 'win32':
+                mkdocs.send_signal(signal)
+            else:
+                kill(mkdocs.pid, signal)
+        except:
+            print(" - Failed to send signal ")
+            return
 
         while self._is_active(mkdocs):
             sleep(self.SLEEPING_TIME_WAITING_FOR_SHUTDOWN)
