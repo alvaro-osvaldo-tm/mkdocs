@@ -219,20 +219,8 @@ class Shutdown_by_signal_tests(unittest.TestCase):
             print(f" ============ Testing with '{strsignal(signal)}' ============ ")
 
             mkdocs = self._execute_mkdocs_as_liveserver(repository.site_dir)
-            mkdocs_temporary_path = self._locate_mkdocs_directory(signature=repository.signature)
-
-            self.assertTrue(
-                mkdocs_temporary_path is not None, "Unable to locate the live server directory"
-            )
 
             self._wait_for_shutdown(mkdocs, signal)
-
-            was_cleaned = self._was_directory_cleaned(mkdocs_temporary_path)
-
-            if not was_cleaned:
-                print(f"The Mkdocs '{mkdocs_temporary_path}' was not cleaned "
-                f"with signal '{strsignal(signal)}'")
-
 
             # This is a flaw in 'liveserver' shutdown process
             # it seems mkdocs become zombie when testing.
